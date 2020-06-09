@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import HeaderLoggedOut from "./HeaderLoggedOut";
+import HeaderLoggedIn from "./HeaderLoggedIn";
 
 export default function Header() {
+	const [loggedIn, setLoggedIn] = useState();
 	return (
 		<header className="header-bar bg-primary mb-3">
 			<div className="container d-flex flex-column flex-md-row align-items-center p-3">
@@ -11,7 +13,11 @@ export default function Header() {
 						Social-App
 					</Link>
 				</h4>
-				<HeaderLoggedOut />
+				{loggedIn ? (
+					<HeaderLoggedIn setLoggedIn={setLoggedIn} />
+				) : (
+					<HeaderLoggedOut setLoggedIn={setLoggedIn} />
+				)}
 			</div>
 		</header>
 	);
