@@ -31,7 +31,7 @@ function CreatePost(props) {
 					</label>
 					<input
 						onChange={(e) => {
-							setTitle(e.target.title);
+							setTitle(e.target.value);
 						}}
 						autoFocus
 						name="title"
@@ -48,7 +48,7 @@ function CreatePost(props) {
 					</label>
 					<textarea
 						onChange={(e) => {
-							setBody(e.target.body);
+							setBody(e.target.value);
 						}}
 						name="body"
 						id="post-body"
