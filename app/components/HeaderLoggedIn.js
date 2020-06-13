@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import Context from "../context/Context";
+import DispatchContext from "../context/DispatchContext";
 
 export default function HeaderLoggedIn(props) {
-	const { setLoggedIn } = useContext(Context);
+	const appDispatch = useContext(DispatchContext);
+
 	function handleLoggedOut() {
-		setLoggedIn(false);
+		appDispatch({ type: "logout" });
 		localStorage.removeItem("social-app-token");
 		localStorage.removeItem("social-app-username");
 		localStorage.removeItem("social-app-avatar");

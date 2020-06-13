@@ -2,13 +2,13 @@ import React, { useEffect, useState, useContext } from "react";
 import Page from "./Page";
 import Axios from "axios";
 import { withRouter } from "react-router-dom";
-import Context from "../context/Context";
+import DispatchContext from "../context/DispatchContext";
 
 function CreatePost(props) {
 	const [title, setTitle] = useState();
 	const [body, setBody] = useState();
 
-	const { addFlashMessage } = useContext(Context);
+	const appDispatch = useContext(DispatchContext);
 
 	async function handleSubmit(e) {
 		e.preventDefault();
@@ -19,7 +19,10 @@ function CreatePost(props) {
 				token: localStorage.getItem("social-app-token"),
 			});
 			// addFlashMessage Props
-			addFlashMessage("Congratulation you successfully created a post.");
+			appDispatch({
+				type: "flashMessage",
+				value: "Congrats you created a post",
+			});
 			// redirect to new post url-using-withRouter
 			props.history.push(`/post/${response.data}`);
 			console.log(`new post was created`);
