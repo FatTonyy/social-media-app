@@ -15,6 +15,7 @@ import About from "./components/About";
 import Terms from "./components/Terms";
 import ViewSinglePost from "./components/ViewSinglePost";
 import FlashMessages from "./components/FlashMessages";
+import Context from "../app/context/Context";
 
 function Main() {
 	const [loggedIn, setLoggedIn] = useState(
@@ -26,30 +27,32 @@ function Main() {
 		setFlashMessages((prev) => prev.concat(msg));
 	}
 	return (
-		<BrowserRouter>
-			<FlashMessages messages={flashMessages} />
-			<Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-			<Switch>
-				<Route path="/" exact>
-					{loggedIn ? <Home /> : <HomeGuest />}
-				</Route>
-				<Route path="/post/:id">
-					<ViewSinglePost />
-				</Route>
-				<Route path="/create-post">
-					<CreatePost addFlashMessage={addFlashMessage} />
-				</Route>
-				<Route path="/about-us" exact>
-					{" "}
-					<About />
-				</Route>
-				<Route path="/terms" exact>
-					{" "}
-					<Terms />
-				</Route>
-			</Switch>
-			<Footer />
-		</BrowserRouter>
+		<Context.Provider value={{ addFlashMessage, setLoggedIn }}>
+			<BrowserRouter>
+				<FlashMessages messages={flashMessages} />
+				<Header loggedIn={loggedIn} />
+				<Switch>
+					<Route path="/" exact>
+						{loggedIn ? <Home /> : <HomeGuest />}
+					</Route>
+					<Route path="/post/:id">
+						<ViewSinglePost />
+					</Route>
+					<Route path="/create-post">
+						<CreatePost />
+					</Route>
+					<Route path="/about-us" exact>
+						{" "}
+						<About />
+					</Route>
+					<Route path="/terms" exact>
+						{" "}
+						<Terms />
+					</Route>
+				</Switch>
+				<Footer />
+			</BrowserRouter>
+		</Context.Provider>
 	);
 }
 
