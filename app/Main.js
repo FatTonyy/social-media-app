@@ -21,10 +21,9 @@ function Main() {
 		Boolean(localStorage.getItem("social-app-token"))
 	);
 	const [flashMessages, setFlashMessages] = useState([]);
+
 	function addFlashMessage(msg) {
-		setFlashMessages((prev) => {
-			prev.concat(msg);
-		});
+		setFlashMessages((prev) => prev.concat(msg));
 	}
 	return (
 		<BrowserRouter>
