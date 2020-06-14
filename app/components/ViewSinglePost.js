@@ -70,15 +70,15 @@ export default function ViewSinglePost() {
 			<div className="body-content">
 				<ReactMarkdown
 					source={post.body}
-					allowedTypes={[
-						"paragraphs",
-						"strong",
-						"emphasis",
-						"text",
-						"heading",
-						"list",
-						"listItem",
-					]}
+					// allowedTypes={[
+					// 	"paragraphs",
+					// 	"strong",
+					// 	"emphasis",
+					// 	"text",
+					// 	"heading",
+					// 	"list",
+					// 	"listItem",
+					// ]}
 				/>
 			</div>
 		</Page>
