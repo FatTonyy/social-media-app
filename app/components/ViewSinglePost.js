@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Page from "./Page";
 import { useParams, Link } from "react-router-dom";
 import Axios from "axios";
+import LoadingDotsIcon from "./LoadingDotsIcon";
 
 export default function ViewSinglePost() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -23,8 +24,8 @@ export default function ViewSinglePost() {
 
 	if (isLoading) {
 		return (
-			<Page>
-				<div>loading...</div>
+			<Page title="...">
+				<LoadingDotsIcon />
 			</Page>
 		);
 	}
