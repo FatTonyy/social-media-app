@@ -9,16 +9,22 @@ export default function ProfilePost() {
 	const { username } = useParams();
 
 	useEffect(() => {
+		const ourRequest = Axios.CancelToken.source();
+
 		async function fetchPosts() {
 			try {
-				const response = await Axios.get(`/profile/${username}/posts`);
+				const response = await Axios.get(`/profile/${username}/posts`, {
+					CancelToken: ourRequest.token,
+				});
 				setPosts(response.data);
 				setIsLoading(false);
 			} catch (e) {
-				console.log("there was a problem");
+				console.log("there was a problem or the request was cancelled");
 			}
 		}
 		fetchPosts();
+
+		return () => ourRequest.cancel();
 	}, []);
 
 	if (isLoading)
