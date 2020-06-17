@@ -75,7 +75,6 @@ function ViewSinglePost(props) {
 						type: "flashMessage",
 						value: "Post was successfully deleted.",
 					});
-
 					// 2. redirect back to the current user's profile
 					props.history.push(`/profile/${appState.user.username}`);
 				}

@@ -22,6 +22,7 @@ import FlashMessages from "./components/FlashMessages";
 import Profile from "./components/Profile";
 import EditPost from "./components/EditPost";
 import NotFound from "./components/NotFound";
+import Search from "./components/Search";
 
 function Main() {
 	const initialState = {
@@ -32,6 +33,7 @@ function Main() {
 			username: 'localStorage.getItem("social-app-username")',
 			avatar: 'localStorage.getItem("social-app-avatar")',
 		},
+		isSearchOpen: false,
 	};
 	function ourReducer(draft, action) {
 		switch (action.type) {
@@ -44,6 +46,12 @@ function Main() {
 				return;
 			case "flashMessage":
 				draft.flashMessages.push(action.value);
+				return;
+			case "openSearch":
+				draft.isSearchOpen = true;
+				return;
+			case "closeSearch":
+				draft.isSearchOpen = false;
 				return;
 		}
 	}
@@ -96,6 +104,7 @@ function Main() {
 							<NotFound />
 						</Route>
 					</Switch>
+					{state.isSearchOpen ? <Search /> : ""}
 					<Footer />
 				</BrowserRouter>
 			</DispatchContext.Provider>
