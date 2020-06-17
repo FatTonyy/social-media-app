@@ -1,8 +1,15 @@
 import React, { useContext, useEffect } from "react";
 import DispatchContext from "../context/DispatchContext";
+import { useImmer } from "use-immer";
 
 export default function Search() {
 	const appDispatch = useContext(DispatchContext);
+	const [state, setState] = useImmer({
+		searchTerm: "",
+		results: [],
+		show: "neither",
+		requestCount: 0,
+	});
 
 	// telling browser to listen to keypress
 	useEffect(() => {
@@ -13,10 +20,39 @@ export default function Search() {
 		};
 	}, []);
 
+	// setting timeout for request calls to avoid server overload
+	useEffect(() => {
+		const delay = setTimeout(() => {
+			setState((draft) => {
+				draft.requestCount++;
+			});
+		}, 3000);
+		return () => {
+			clearTimeout(delay);
+		};
+	}, [state.searchTerm]);
+
+	// sending axios request up to search for what user types
+	useEffect(() => {
+		if (state.requestCount) {
+			// send axios request here
+		}
+		return () => {
+			cancel;
+		};
+	}, [state.requestCount]);
+
 	function searchKeyPressHandler(e) {
 		if (e.keyCode === 27) {
 			appDispatch({ type: "closeSearch" });
 		}
+	}
+
+	function handleInput(e) {
+		const value = e.target.value;
+		setState((draft) => {
+			draft.searchTerm = value;
+		});
 	}
 
 	return (
@@ -27,6 +63,7 @@ export default function Search() {
 						<i className="fas fa-search"></i>
 					</label>
 					<input
+						onChange={handleInput}
 						autoFocus
 						type="text"
 						autoComplete="off"
