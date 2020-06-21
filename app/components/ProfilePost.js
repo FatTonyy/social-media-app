@@ -25,7 +25,7 @@ export default function ProfilePost() {
 		fetchPosts();
 
 		return () => ourRequest.cancel();
-	}, []);
+	}, [username]);
 
 	if (isLoading)
 		return (
