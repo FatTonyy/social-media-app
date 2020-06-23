@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef } from "react";
 import StateContext from "../context/StateContext";
 import DispatchContext from "../context/DispatchContext";
 import { useImmer } from "use-immer";
+import { Link } from "react-router-dom";
 import io from "socket.io-client";
 
 const socket = io("http://localhost:8080");
@@ -10,14 +11,17 @@ export default function Chat() {
 	const appState = useContext(StateContext);
 	const appDispatch = useContext(DispatchContext);
 	const chatField = useRef(null);
+	const chatLog = useRef(null);
 	const [state, setState] = useImmer({
 		fieldValue: "",
 		chatMessages: [],
 	});
 
+	//watches isOpen for Changes
 	useEffect(() => {
 		if (appState.isChatOpen) {
 			chatField.current.focus();
+			appDispatch({ type: "clearUnreadChatCount" });
 		}
 		// return () => {
 		// 	cleanup;
@@ -34,6 +38,17 @@ export default function Chat() {
 		// 	cleanup;
 		// };
 	}, []);
+
+	//wtaching chatMessages for changes
+	useEffect(() => {
+		chatLog.current.scrollTop = chatLog.current.scrollHeight;
+		if (state.chatMessages.length && !appState.isChatOpen) {
+			appDispatch({ type: "incrementUnreadChatCount" });
+		}
+		// return () => {
+		// 	cleanup;
+		// };
+	}, [state.chatMessages]);
 
 	function handleFieldChange(e) {
 		const value = e.target.value;
@@ -78,11 +93,11 @@ export default function Chat() {
 					<i className="fas fa-times-circle"></i>
 				</span>
 			</div>
-			<div id="chat" className="chat-log">
+			<div id="chat" className="chat-log" ref={chatLog}>
 				{state.chatMessages.map((message, index) => {
 					if (message.username === appState.user.username) {
 						return (
-							<div className="chat-self">
+							<div key={index} className="chat-self">
 								<div className="chat-message">
 									<div className="chat-message-inner">{message.message}</div>
 								</div>
@@ -91,15 +106,15 @@ export default function Chat() {
 						);
 					}
 					return (
-						<div className="chat-other">
-							<a href="#">
+						<div key={index} className="chat-other">
+							<Link to={`/profile/${message.username}`}>
 								<img className="avatar-tiny" src={message.avatar} />
-							</a>
+							</Link>
 							<div className="chat-message">
 								<div className="chat-message-inner">
-									<a href="#">
-										<strong>{message.username}</strong>
-									</a>
+									<Link to={`/profile/${message.username}`}>
+										<strong>{message.username}: </strong>
+									</Link>
 									{""} {message.message}
 								</div>
 							</div>
