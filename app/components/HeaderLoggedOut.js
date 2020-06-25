@@ -15,14 +15,17 @@ export default function HeaderLoggedOut(props) {
 				password,
 			});
 			if (response.data) {
-				/*
-				localStorage.setItem("social-app-token", response.data.token);
-				localStorage.setItem("social-app-username", response.data.username);
-				localStorage.setItem("social-app-avatar", response.data.avatar);
-				*/
 				appDispatch({ type: "login", data: response.data });
+				appDispatch({
+					type: "flashMessage",
+					value: "You have successfully logged in",
+				});
 			} else {
 				console.log(`Incorrect password or username`);
+				appDispatch({
+					type: "flashMessage",
+					value: "Invalid username / password",
+				});
 			}
 		} catch (e) {
 			console.log(`there was a problem`);
