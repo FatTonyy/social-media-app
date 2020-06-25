@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useReducer, useEffect, Suspense } from "react";
 import ReactDom from "react-dom";
 import { useImmerReducer } from "use-immer";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
@@ -11,14 +11,16 @@ Axios.defaults.baseURL = "http://localhost:8080";
 import StateContext from "../app/context/StateContext";
 import DispatchContext from "../app/context/DispatchContext";
 
+import LoadingDotsIcon from "./components/LoadingDotsIcon";
 import Header from "./components/Header";
 import Home from "./components/Home";
-import CreatePost from "./components/CreatePost";
+// integrating-lazy-loading-into-react
+const CreatePost = React.lazy(() => import("./components/CreatePost"));
+const ViewSinglePost = React.lazy(() => import("./components/ViewSinglePost"));
 import HomeGuest from "./components/HomeGuest";
 import Footer from "./components/Footer";
 import About from "./components/About";
 import Terms from "./components/Terms";
-import ViewSinglePost from "./components/ViewSinglePost";
 import FlashMessages from "./components/FlashMessages";
 import Profile from "./components/Profile";
 import EditPost from "./components/EditPost";
@@ -120,34 +122,36 @@ function Main() {
 				<BrowserRouter>
 					<FlashMessages messages={state.flashMessages} />
 					<Header />
-					<Switch>
-						<Route path="/profile/:username">
-							<Profile />
-						</Route>
-						<Route path="/" exact>
-							{state.loggedIn ? <Home /> : <HomeGuest />}
-						</Route>
-						<Route path="/post/:id" exact>
-							<ViewSinglePost />
-						</Route>
-						<Route path="/post/:id/edit" exact>
-							<EditPost />
-						</Route>
-						<Route path="/create-post">
-							<CreatePost />
-						</Route>
-						<Route path="/about-us" exact>
-							{" "}
-							<About />
-						</Route>
-						<Route path="/terms" exact>
-							{" "}
-							<Terms />
-						</Route>
-						<Route>
-							<NotFound />
-						</Route>
-					</Switch>
+					<Suspense fallback={<LoadingDotsIcon />}>
+						<Switch>
+							<Route path="/profile/:username">
+								<Profile />
+							</Route>
+							<Route path="/" exact>
+								{state.loggedIn ? <Home /> : <HomeGuest />}
+							</Route>
+							<Route path="/post/:id" exact>
+								<ViewSinglePost />
+							</Route>
+							<Route path="/post/:id/edit" exact>
+								<EditPost />
+							</Route>
+							<Route path="/create-post">
+								<CreatePost />
+							</Route>
+							<Route path="/about-us" exact>
+								{" "}
+								<About />
+							</Route>
+							<Route path="/terms" exact>
+								{" "}
+								<Terms />
+							</Route>
+							<Route>
+								<NotFound />
+							</Route>
+						</Switch>
+					</Suspense>
 					<CSSTransition
 						timeout={330}
 						in={state.isSearchOpen}
