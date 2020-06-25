@@ -86,6 +86,34 @@ function Main() {
 		}
 	}, [state.loggedIn]);
 
+	// Check to see if token has expired or not on first render
+	useEffect(() => {
+		if (state.loggedIn) {
+			// send axios request here
+			const ourRequest = Axios.CancelToken.source();
+			async function fetchResults() {
+				try {
+					const response = await Axios.post(
+						`/checkToken`,
+						{ token: state.user.token },
+						{ cancelToken: ourRequest.token }
+					);
+					if (!response.data) {
+						dispatch({ type: "logout" });
+						dispatch({
+							type: "flashMessage",
+							value: "Your session has expired, please log in again",
+						});
+					}
+				} catch (e) {
+					console.log("the request was cancelled");
+				}
+			}
+			fetchResults();
+			return () => ourRequest.cancel();
+		}
+	}, []);
+
 	return (
 		<StateContext.Provider value={state}>
 			<DispatchContext.Provider value={dispatch}>
