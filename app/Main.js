@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect, Suspense } from "react";
+import React, { useEffect, Suspense } from "react";
 import ReactDom from "react-dom";
 import { useImmerReducer } from "use-immer";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
@@ -25,8 +25,8 @@ import FlashMessages from "./components/FlashMessages";
 import Profile from "./components/Profile";
 import EditPost from "./components/EditPost";
 import NotFound from "./components/NotFound";
-import Search from "./components/Search";
-import Chat from "./components/Chat";
+const Search = React.lazy(() => import("./components/Search"));
+const Chat = React.lazy(() => import("./components/Chat"));
 
 function Main() {
 	const initialState = {
@@ -158,9 +158,13 @@ function Main() {
 						classNames="search-overlay"
 						unmountOnExit
 					>
-						<Search />
+						<div className="search-overlay">
+							<Suspense fallback="">
+								<Search />
+							</Suspense>
+						</div>
 					</CSSTransition>
-					<Chat />
+					<Suspense fallback="">{state.loggedIn && <Chat />}</Suspense>
 					<Footer />
 				</BrowserRouter>
 			</DispatchContext.Provider>
