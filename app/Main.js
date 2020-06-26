@@ -6,7 +6,8 @@ import { CSSTransition } from "react-transition-group";
 import Axios from "axios";
 
 // setting-universal-url-to-backend
-Axios.defaults.baseURL = process.env.BACKENDURL || "";
+Axios.defaults.baseURL =
+	process.env.BACKENDURL || "https://social-app-gh.herokuapp.com";
 
 import StateContext from "../app/context/StateContext";
 import DispatchContext from "../app/context/DispatchContext";
