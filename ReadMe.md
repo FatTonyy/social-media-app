@@ -10,7 +10,7 @@
 ### **_Installation_**
 
 + Fork project
-+ Npm install
++ yarn / yarn install
 + Npm run dev on localhost:3000
 + Boom you're good to go
 
