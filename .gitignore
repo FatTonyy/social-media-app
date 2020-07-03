@@ -3,3 +3,4 @@ access
 backend-api-social-app
 .env
 dist/
+.vscode/
