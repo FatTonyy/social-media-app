@@ -11,7 +11,7 @@
 
 + Fork project
 + Npm install
-+ Npm run dev
++ Npm run dev on localhost:3000
 + Boom you're good to go
 
 #### _Link_
